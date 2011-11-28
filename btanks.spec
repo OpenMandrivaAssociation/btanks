@@ -68,12 +68,12 @@ running %{name}.
 
 %prep
 %setup -q
-%patch0 -b .remove-rpath
-%patch1 -b .disable-smpeg
-%patch2 -b .libcheck
-%patch3 -b .excessopts
-%patch4 -b .gcc
-%patch5 -b .dso
+%patch0 -p0 -b .remove-rpath
+%patch1 -p0 -b .disable-smpeg
+%patch2 -p0 -b .libcheck
+%patch3 -p0 -b .excessopts
+%patch4 -p0 -b .gcc
+%patch5 -p0 -b .dso
 dos2unix -k *.txt ChangeLog *.url LICENSE LICENSE.EXCEPTION
 
 iconv -f latin1 -t utf-8 LICENSE.EXCEPTION > LICENSE.EXCEPTION.new
