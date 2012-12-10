@@ -1,34 +1,35 @@
 Name:		btanks
 Version:	0.9.8083
-Release:	%mkrel 1
+Release:	3
 Summary:	Funny battle on your desk
-Summary(ru):	Веселая маленькая война на столе
 Group:		Games/Arcade
 # Libraries clunk, mrt and sdlx are under LGPLv2+, all other sources are GPLv2+
 License:	GPLv2+ with exceptions and LGPLv2+
 URL:		http://btanks.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
 # Remove RPath from binaries
-Patch0:		%{name}-remove-rpath.patch
+Patch0:		btanks-remove-rpath.patch
 # Disable video previews of map levels (we don't distribute video anyway)
-Patch1:		%{name}-disable-smpeg.patch
+Patch1:		btanks-disable-smpeg.patch
 # Avoid problem with lib checks using c++ instead of c.
-Patch2:		%{name}-libcheck.patch
+Patch2:		btanks-libcheck.patch
 # Don't override Fedora's options
-Patch3:		%{name}-excessopts.patch
+Patch3:		btanks-excessopts.patch
 # gcc is now more picky about casting
-Patch4:		%{name}-gcc.patch
+Patch4:		btanks-gcc.patch
 # bted doesn't explicitly link to clunl
-Patch5:		%{name}-dso.patch
+Patch5:		btanks-dso.patch
+Patch6:		btanks-gcc47.patch
 
 Requires:	%{name}-data = %{version}-%{release}
-BuildRequires:	MesaGLU-devel
-BuildRequires:	SDL-devel
-BuildRequires:	SDL_image-devel
-BuildRequires:	expat-devel
-BuildRequires:	libvorbis-devel
+BuildRequires:	pkgconfig(gl)
+BuildRequires:	pkgconfig(glu)
+BuildRequires:	pkgconfig(sdl)
+BuildRequires:	pkgconfig(SDL_image)
+BuildRequires:	pkgconfig(expat)
+BuildRequires:	pkgconfig(vorbis)
 BuildRequires:	lua-devel
-BuildRequires:	zlib-devel
+BuildRequires:	pkgconfig(zlib)
 BuildRequires:	scons
 BuildRequires:	zip
 BuildRequires:	dos2unix
@@ -43,18 +44,6 @@ several network modes for deathmatch and cooperative.
 What else is needed to have fun with your friends?
 
 And all is packed and ready for you in Battle Tanks.
-
-%description -l ru
-«Battle Tanks» — это веселая маленькая война на столе, где вы можете выбрать
-одну из трех доступных боевых машин и, используя весь доступный арсенал
-вооружения, уничтожать своих противников. Это оригинальная графика в
-мультипликационном стиле, забойная музыка, юмор, динамичность и большое
-количество оружия. Это сетевые потасовки и кооперативные миссии в разнообразных
-игровых локациях.
-Что еще нужно игроку, чтобы отлично провести время с друзьями?
-
-Все это вы найдете в «Battle Tanks».
-
 
 %package	data
 Summary:	Data files for %{name}
@@ -74,6 +63,7 @@ running %{name}.
 %patch3 -p0 -b .excessopts
 %patch4 -p0 -b .gcc
 %patch5 -p0 -b .dso
+%patch6 -p0 -b .gcc4.7
 dos2unix -k *.txt ChangeLog *.url LICENSE LICENSE.EXCEPTION
 
 iconv -f latin1 -t utf-8 LICENSE.EXCEPTION > LICENSE.EXCEPTION.new
@@ -94,7 +84,7 @@ mv -f README-ru.txt{.new,}
 # word rather than as multiple arguments. CXXFLAGS is only needed if
 # there are c++ only flags that need to get added.
 export CFLAGS="%{optflags}"; \
-        scons %{?_smp_mflags} \
+        scons \
         prefix=%{_prefix} \
         lib_dir=%{_libdir} \
         plugins_dir=%{_libdir}/%{name} \
@@ -103,8 +93,6 @@ export CFLAGS="%{optflags}"; \
         enable_lua=true
 
 %install
-rm -rf %{buildroot}
-
 # binaries
 install -dm 755 %{buildroot}%{_gamesbindir}
 install -m 755 build/release/engine/%{name} %{buildroot}%{_gamesbindir}
@@ -165,12 +153,7 @@ StartupNotify=true
 Categories=Game;ArcadeGame;
 EOF
 
-%clean
-rm -rf %{buildroot}
-
-
 %files
-%defattr(-,root,root,-)
 %doc README-{editor,en,fr,ru}.txt ChangeLog *.url LICENSE LICENSE.EXCEPTION
 %{_gamesbindir}/%{name}
 %{_gamesbindir}/bted
@@ -185,4 +168,10 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %dir %{_gamesdatadir}/%{name}
 %{_gamesdatadir}/%{name}/data
+
+
+%changelog
+* Mon Nov 28 2011 Andrey Bondrov <abondrov@mandriva.org> 0.9.8083-1mdv2011.0
++ Revision: 734933
+- imported package btanks
 
