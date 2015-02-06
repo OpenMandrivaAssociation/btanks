@@ -1,6 +1,6 @@
 Name:		btanks
 Version:	0.9.8083
-Release:	3
+Release:	4
 Summary:	Funny battle on your desk
 Group:		Games/Arcade
 # Libraries clunk, mrt and sdlx are under LGPLv2+, all other sources are GPLv2+
