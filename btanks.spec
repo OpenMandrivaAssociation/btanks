@@ -5,7 +5,7 @@ Summary:	Funny battle on your desk
 Group:		Games/Arcade
 # Libraries clunk, mrt and sdlx are under LGPLv2+, all other sources are GPLv2+
 License:	GPLv2+ with exceptions and LGPLv2+
-URL:		http://btanks.sourceforge.net/
+URL:		https://btanks.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
 # Remove RPath from binaries
 Patch0:		btanks-remove-rpath.patch
